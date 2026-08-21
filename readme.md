@@ -2,7 +2,7 @@
 
 Este repositorio contiene la implementación de un protocolo de comunicación cliente-servidor de capa de aplicación, diseñado para tolerar fallos e interferencias en la red.
 
-## Equipo de Trabajo (Roles)
+## Equipo de Trabajo 
 
 - Jessica Ramírez
 - Enderson Chávez
