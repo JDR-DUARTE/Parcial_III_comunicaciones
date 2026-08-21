@@ -7,11 +7,11 @@ HOST = '127.0.0.1'
 PORT = 5000
 
 def generar_hash(texto):
-    """Genera una huella digital (Hash SHA-256) del texto."""
+    """Huella digital """
     return hashlib.sha256(texto.encode('utf-8')).hexdigest()
 
 def enviar_respuesta(conn, tipo, mensaje):
-    """Función para enviar respuestas estandarizadas (ACK / NACK)."""
+    """Función para enviar respuestas ACK / NACK"""
     trama_respuesta = {
         "tipo": tipo,
         "longitud": len(mensaje),
@@ -28,7 +28,7 @@ def iniciar_servidor():
         print(f"[*] Servidor Blindado (Fase 3) iniciado.")
         print(f"[*] Escuchando en {HOST}:{PORT}...")
 
-        # Agregamos un bucle exterior para que el servidor nunca muera
+        # bucle para mantener el servidor vivo
         while True:
             conn, addr = server_socket.accept()
             with conn:
@@ -37,23 +37,23 @@ def iniciar_servidor():
 
                 while True:
                     try:
-                        # Recibir datos
+                    
                         data = conn.recv(1024)
                         if not data:
                             print("[*] Cliente desconectado limpiamente.")
                             break
 
-                        # 1. MANEJO DE EXCEPCIONES: Atrapamos la basura de Clumsy
+                        # MANEJO DE EXCEPCIONES
                         buffer += data.decode('utf-8')
 
-                        # Procesar todos los mensajes completos
+                        # PROCESAR MENSAJES
                         while '\n' in buffer:
                             mensaje_raw, buffer = buffer.split('\n', 1)
                             print("\n[+] Trama recibida:")
                             print(mensaje_raw)
 
                             try:
-                                # Convertir JSON
+                                # JSON
                                 trama = json.loads(mensaje_raw)
                                 tipo = trama.get("tipo")
                                 longitud = trama.get("longitud")
@@ -64,7 +64,7 @@ def iniciar_servidor():
                                 print("    - Payload  :", payload)
                                 print("    - Hash Rx  :", hash_recibido)
 
-                                # 2. VERIFICACIÓN DE INTEGRIDAD
+                                # VERIFICACIÓN DE INTEGRIDAD
                                 hash_calculado = generar_hash(payload)
                                 
                                 if hash_recibido and hash_calculado != hash_recibido:
@@ -72,7 +72,7 @@ def iniciar_servidor():
                                     enviar_respuesta(conn, "NACK", "Error de integridad (Hash incorrecto)")
                                     continue # Ignoramos este paquete y seguimos escuchando
 
-                                # 3. CONTROL DE FLUJO: Todo está perfecto, enviamos ACK
+                                # CONTROL DE FLUJO
                                 respuesta_texto = f"Servidor recibió '{payload}' intacto."
                                 enviar_respuesta(conn, "ACK", respuesta_texto)
 
@@ -83,7 +83,7 @@ def iniciar_servidor():
                     except UnicodeDecodeError:
                         print("[-] ERROR CRÍTICO ATRAPADO: Paquete corrupto a nivel de bits.")
                         enviar_respuesta(conn, "NACK", "Datos irreconocibles por interferencia.")
-                        buffer = "" # Vaciamos la basura para que no trabe los siguientes mensajes
+                        buffer = "" 
                         
                     except ConnectionResetError:
                         print("[-] El cliente cerró la conexión por timeout (Latencia alta).")

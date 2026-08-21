@@ -30,7 +30,7 @@ El proyecto está diseñado para ejecutarse de manera local (Loopback: `127.0.0.
 Abre una terminal en la carpeta "servidor" del proyecto y ejecuta el servidor en Python:
 
 ```bash
-python servidor_fase_3.py
+python servidor-fase3.py
 ```
 
 El servidor indicará en consola que está escuchando conexiones.
@@ -40,7 +40,7 @@ El servidor indicará en consola que está escuchando conexiones.
 Abre una segunda terminal en la carpeta "cliente" y ejecuta el cliente en Node.js:
 
 ```bash
-node cliente_fase_3.js
+node cliente-fase3.js
 ```
 
 Al hacer esto el cliente calculará el hash SHA-256 del mensaje, iniciará su temporizador y enviará la trama al servidor.
